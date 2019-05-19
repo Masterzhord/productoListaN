@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Index</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+<h:form id="menu">
+            <p:toolbar >
+                
+            
+                <f:facet name="left" >
+                    <h:graphicImage value="/ima/diseno-hombre.jpg"
+                                    style=" margin-top: 10px; " width="50px" height="50px"></h:graphicImage>
+                    <p:commandButton style="position: relative;top: -15px; left: 10px;" action="index"  value="Inicio"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 10px;" action="productolista_1"  value="Registar Ropa"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 10px;" action="Alta"  value="Modificar/Eliminar/Buscar/Filtrar"  type="link"/>
+
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+
+        <h:form id="frmIndex" >
+
+
+            <p:panel header="Registro de Ropa para Hombre">
+                <h:panelGrid columns="1">
+                
+                    <h:graphicImage value="/ima/ropa-hombre-diseno.jpg" style="margin-left: 10px; " width="100%" height="100%"  title="Ropa para Hombres"> 
+                        
+                    </h:graphicImage>
+            
+
+            </h:panelGrid>
+            </p:panel>
+            
+           
+            
+        </h:form>
+
+    </h:body>
+</html>
+

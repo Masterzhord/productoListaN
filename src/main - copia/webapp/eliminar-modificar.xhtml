@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+
+      xmlns:f="http://xmlns.jcp.org/jsf/core" >
+    <h:head>
+        <title>Biblioteca</title>
+    </h:head>
+    <h:body >
+        <style type="text/css">
+            .ui-datalist {
+                width:925px;
+                margin-bottom: 20px;
+            }
+
+            .ui-datalist-item {
+                padding:3px;
+            }
+
+            .paginated .ui-datalist-data {
+                padding-left: 20px;
+            }
+            .ui-icon-Reg {
+                background-image: url(/iconos/Registrar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Eli {
+                background-image: url(/iconos/Eliminar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Ord {
+                background-image: url(/iconos/Ordenar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Mod {
+                background-image: url(/iconos/Modificar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Bus {
+                background-image: url(/iconos/Buscar16.png)!important;  
+                border-radius: 0px!important;}
+
+
+        </style>
+
+
+
+        <h:form>
+            <p:toolbar >
+                
+            
+                <f:facet name="left" >
+                    <h:graphicImage value="/resources/demo/imagen/libro.png"
+                                    style=" margin-top: 10px; " width="50px" height="50px"></h:graphicImage>
+                    <p:commandButton style="position: relative;top: -15px; left: 0px;" action="index"  value="Inicio"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 0px;" action="Alta"  value="Alta Libro"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 0px;" action="eliminar-modificar"  value="Modificar/Eliminar/Buscar/Filtrar"  type="link"/>
+
+                </f:facet>
+            </p:toolbar>
+
+        </h:form>
+
+
+
+        <h:form id="frmAltaLibro" >
+            <p:panel id="pnlBiblioteca"  header="Modificar/Eliminar Libro"/>
+
+
+            <p:growl id="msgs" showDetail="true" />
+            <p:messages id="messages" showDetail="false" closable="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <p:growl id="growl" showDetail="true"  />  
+
+            <p:panel>
+
+                <p:dataTable id="tblLibros" value="#{altaLibrosFormBean.libros}" editable="true" var="lib" widgetVar="tablaLibrosBuscar" filteredValue="#{altaLibrosFormBean.listalibrosBuscados}">
+
+                    <p:ajax event="rowEdit" listener="#{altaLibrosFormBean.onRowEdit}" update=":frmAltaLibro:growl,:frmAltaLibro:tblLibros"/>
+
+
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar:" />
+                            <p:inputText  id="globalFilter" onkeyup="PF('tablaLibrosBuscar').filter()" style="width:200px;" placeholder="Buscador"/>
+                        </p:outputPanel> 
+                    </f:facet>
+
+
+
+
+                    <p:column headerText="Título"  sortBy="#{lib.titulo}" filterBy="#{lib.titulo}" filterStyle="display : none" >
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{lib.titulo}" /></f:facet>
+                            <f:facet name="input"><p:inputTextarea id="txtTitulo" rows="1" cols="40" required="true" value="#{lib.titulo}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="ISBN" sortBy="#{lib.ISB}" filterBy="#{lib.ISB}" filterStyle="display : none" >
+                        <p:outputLabel value="#{lib.ISB}" />
+                    </p:column>
+
+                    <p:column headerText="Autor" sortBy="#{lib.titulo}" filterBy="#{lib.autores}" filterStyle="display : none">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{lib.autores}" /></f:facet>
+                            <f:facet name="input"><p:inputTextarea id="txtinautor" rows="1" cols="40" required="true" value="#{lib.autores}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Código" filterBy="#{lib.codigo}" filterStyle="display : none">
+                        <p:outputLabel value="#{lib.codigo}" />
+                    </p:column>
+
+                    <p:column headerText="Cant. Páginas" sortBy="#{lib.cantPaginas}" filterBy="#{lib.cantPaginas}" filterStyle="display : none">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{lib.cantPaginas}" /></f:facet>
+                            <f:facet name="input"><p:inputTextarea id="txtinCantPagians" rows="1" cols="40" required="true" value="#{lib.cantPaginas}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Género" sortBy="#{lib.tematica}" filterBy="#{lib.tematica}" filterStyle="display : none">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{lib.tematica}" /></f:facet>
+                            <f:facet name="input"><p:inputTextarea id="txtTematica" rows="1" cols="40" required="true" value="#{lib.tematica}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Fecha Edición" sortBy="#{lib.fechaEdicion}" filterBy="#{lib.fechaEdicion}" filterStyle="display : none">
+                        <p:cellEditor>
+                            <f:facet name="output"> <h:outputText value="#{lib.fechaEdicion}" > 
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText> 
+                            </f:facet>
+                            <f:facet name="input"><p:calendar id="intbdate"  
+                                                              pattern="dd/MM/yyyy" mask="true" required="true" 
+                                                              value="#{lib.fechaEdicion}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Eliminar">
+                        <p:commandButton value="Eliminar" actionListener="#{altaLibrosFormBean.eliminarLibro(lib)}" update="frmAltaLibro tblLibros"/>
+                    </p:column>
+
+                    <p:column headerText="Modificar">
+
+                        <p:rowEditor />
+
+                    </p:column>
+                </p:dataTable>
+
+
+
+
+            </p:panel>
+
+
+        </h:form>
+    </h:body>
+</html>
+
+
+
+
+
+
+

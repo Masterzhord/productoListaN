@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+
+      xmlns:f="http://xmlns.jcp.org/jsf/core" >
+    <h:head>
+        <title>Biblioteca</title>
+    </h:head>
+    <h:body >
+        <style type="text/css">
+            .ui-datalist {
+                width:925px;
+                margin-bottom: 20px;
+            }
+
+            .ui-datalist-item {
+                padding:3px;
+            }
+
+            .paginated .ui-datalist-data {
+                padding-left: 20px;
+            }
+            .ui-icon-Reg {
+                background-image: url(/iconos/Registrar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Eli {
+                background-image: url(/iconos/Eliminar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Ord {
+                background-image: url(/iconos/Ordenar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Mod {
+                background-image: url(/iconos/Modificar16.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Bus {
+                background-image: url(/iconos/Buscar16.png)!important;  
+                border-radius: 0px!important;}
+
+        </style>
+
+
+
+        <h:form>
+            <p:toolbar >
+                
+            
+                <f:facet name="left" >
+                    <h:graphicImage value="/resources/demo/imagen/libro.png"
+                                    style=" margin-top: 10px; " width="50px" height="50px"></h:graphicImage>
+                    <p:commandButton style="position: relative;top: -15px; left: 0px;" action="index"  value="Inicio"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 0px;" action="Alta"  value="Alta Libro"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 0px;" action="eliminar-modificar"  value="Modificar/Eliminar/Buscar/Filtrar"  type="link"/>
+
+                </f:facet>
+            </p:toolbar>
+
+        </h:form>
+        
+        
+        <h:form id="frmAltaLibro" >
+
+
+            <p:panel header="Alta Libro"/>
+
+            <p:growl id="msgs" showDetail="true" />
+            <p:messages id="messages" showDetail="false" closable="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <p:growl id="growl" showDetail="true"  />  
+
+            <p:panel>
+                <p:panelGrid  id="formulario" columns="3">
+
+                    <p:outputLabel  value="Código" for="cod" />
+                    <p:inputNumber  id="cod" maxValue="99999" decimalPlaces="0" thousandSeparator="" placeholder="Ingrese código"
+                                    value="#{altaLibrosFormBean.libro.codigo}" required="true"/>
+                    <p:message for="cod" />
+
+                    <p:outputLabel  value="ISBN" for="isb" />
+                    <p:inputNumber  id="isb" maxValue="99999" decimalPlaces="0" thousandSeparator="" placeholder="Ingrese isbn"
+                                    value="#{altaLibrosFormBean.libro.ISB}" required="true"/>
+                    <p:message for="isb" />
+
+                    <p:outputLabel value="Título" for="titulo"/>
+                    <p:inputText  id="titulo" value="#{altaLibrosFormBean.libro.titulo}" required="true" 
+                                  placeholder="Ingrese Título"/>
+                    <p:message for="titulo" />
+
+                    <p:outputLabel value="Cantidad de Paginas" for="cant"/>
+                    <p:inputNumber id="cant" maxValue="9999" decimalPlaces="0" thousandSeparator="" placeholder="Ingrese cant. de páginas"
+                                   value="#{altaLibrosFormBean.libro.cantPaginas}" required="true"/>
+                    <p:message for="cant" />
+
+                    <p:outputLabel value="Autor" for="autor" />
+                    <p:inputText  id="autor" value="#{altaLibrosFormBean.libro.autores}"  required="true" 
+                                  placeholder="Ingrese Autor"/>
+                    <p:message for="autor" />
+
+                    <p:outputLabel value="Género" for="genero"/>
+                    <p:inputText id="genero" value="#{altaLibrosFormBean.libro.tematica}" required="true" 
+                                 placeholder="Ingrese Género"/>
+                    <p:message for="genero" />
+
+
+                    <p:outputLabel value="Fecha de publicacion" for="button" />
+                    <p:calendar id="button" value="#{altaLibrosFormBean.libro.fechaEdicion}" showOn="button" 
+                                required="true" placeholder="Ingrese fecha de publicación"/>
+                      <p:message for="button" />
+                    
+                   
+
+                    <p:commandButton value="Guardar" actionListener="#{altaLibrosFormBean.guardarLibro()}" update=" frmAltaLibro tblLibros"/>
+                    <p:commandButton type="reset" value="Limpiar Formulario"></p:commandButton>
+                </p:panelGrid>
+                <br></br>
+
+
+
+
+                <p:dataTable id="tblLibros" value="#{altaLibrosFormBean.libros}" editable="true" var="lib" widgetVar="tablaLibrosBuscar" filteredValue="#{altaLibrosFormBean.listalibrosBuscados}">
+
+                    <p:ajax event="rowEdit" listener="#{altaLibrosFormBean.onRowEdit}" update=":frmAltaLibro:growl,:frmAltaLibro:tblLibros"/>
+
+
+
+                    <f:facet name="header">
+                        <h:outputText value="Lista de Libros" />
+                    </f:facet>
+
+
+
+
+                    <p:column headerText="Titulo">
+                        <p:outputLabel value="#{lib.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="ISBN">
+                        <p:outputLabel value="#{lib.ISB}" />
+                    </p:column>
+
+                    <p:column headerText="Autor">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{lib.autores}" /></f:facet>
+                            <f:facet name="input"><p:inputTextarea id="txtinautor" rows="1" cols="40" required="true" value="#{lib.autores}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Código">
+                        <p:outputLabel value="#{lib.codigo}" />
+                    </p:column>
+
+                    <p:column headerText="Cantidad de Páginas">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{lib.cantPaginas}" /></f:facet>
+                            <f:facet name="input"><p:inputTextarea id="txtinCantPagians" rows="1" cols="40" required="true" value="#{lib.cantPaginas}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Género">
+                        <p:outputLabel value="#{lib.tematica}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha de edición">
+                        <p:outputLabel value="#{lib.fechaEdicion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                        </p:outputLabel>
+                    </p:column>
+
+                </p:dataTable>
+
+
+
+
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
+
+
+
+
+
