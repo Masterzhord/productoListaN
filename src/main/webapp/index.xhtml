@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Index</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+<h:form id="menu">
+            <p:toolbar >
+                
+            
+                <f:facet name="left" >
+                   
+                    <h:graphicImage value="/ima/diseno-hombre.jpg" style=" margin-top: 10px; " width="50px" height="50px"></h:graphicImage>
+                    <p:commandButton style="position: relative;top: -15px; left: 10px;" action="index"  value="Inicio"  type="link"/>
+                    <p:commandButton style="position: relative;top: -15px; left: 17px;" action="productolista_1"  value="Registar Ropa"  type="link"/>
+                    <h:commandLink action="/tips.html" target="_blank"><p:commandButton style="position: relative;top: -15px; left: 20px;" value="Tips de compra" type="link"/></h:commandLink>
+                    <h:commandLink action="/guia.html" target="_blank"><p:commandButton style="position: relative;top: -15px; left: 30px;" value="Guia Puesto Online del Proyecto" type="link"/></h:commandLink>
+                
+                     
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+
+        <h:form id="frmIndex" >
+
+
+            <p:panel header="Registro de Ropa para Hombre">
+            <h:panelGrid columns="1">
+                    <p:galleria  value="#{imagenesBean.images}"  var="image" panelWidth="800" panelHeight="500" showCaption="true" >
+                        <p:graphicImage value="/resources/demo/imagen/#{image}" title="#{image}" />
+                    </p:galleria>
+            
+
+            </h:panelGrid>
+            </p:panel>
+            
+           
+            
+        </h:form>
+
+    </h:body>
+</html>
+

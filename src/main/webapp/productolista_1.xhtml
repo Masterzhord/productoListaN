@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Tienda</title>
+    </h:head>
+    <h:body>
+        <h3 style="margin-top:0"> <b> Tienda </b></h3>
+        <style type="text/css">
+            .ui-datalist {
+                width:925px;
+                margin-bottom: 20px;
+            }
+
+            .ui-datalist-item {
+                padding:3px;
+            }
+            .paginated .ui-datalist-data {
+                padding-left: 20px;
+            }
+
+            .ui-icon-Reg {
+                background-image: url(/ima/registrar216.png)!important;  
+                border-radius: 0px!important;}
+            .ui-icon-Eli {
+                background-image: url(/ima/eliminar16.png)!important;  
+                border-radius: 0px!important;}
+
+        </style>
+
+        <h:form id="frmTienda">
+            <p:growl id="growl" showDetail="true" life="2000"/> 
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton style="position: relative; left: 0px;" action="index"  value="Inicio"  type="link"/>
+                    <p:commandButton type="button" title="Registrar Producto" value="Registrar"  icon="ui-icon-Reg" update=":dlregistro" onclick="PF('wregistro').show();" />
+                    <p:commandButton type="button" title="Eliminar Producto" value="Eliminar" icon="ui-icon-Eli" update=":dialogoEli"  onclick="PF('wdialogoEli').show();"/>
+                    <h:commandLink>
+                        <h:graphicImage value="/ima/pdf24.png" title="Guardar Tabla en PDF" style="position: relative;top: 8px; left: 10px;"/>
+                        <p:dataExporter type="pdf" target="tableLista" fileName="pdfRopa.pdf" />
+                    </h:commandLink>
+                    <p:outputLabel value=" ⇐Descargar Lista de Productos"/>
+                </f:facet>
+            </p:toolbar>  
+            
+            
+            
+
+            <p:dataList emptyMessage="Ningun Registro" id="datalist"  value="#{productoFormBean.obtenerproducto()}" var="Producto" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                <f:facet name="header">
+                    Registros de Productos
+                </f:facet>
+
+                <p:commandLink update=":frmTienda:ProductoDetail" oncomplete="PF('ProductoDialog').show()" title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px;margin-top:3px; color:#333333">
+                    <f:setPropertyActionListener value="#{Producto}" target="#{productoFormBean.selectproducto}" />
+                    <h:outputText value="#{Producto.marca}, #{Producto.nombre}"/>
+
+                </p:commandLink>
+
+                <h:outputText value="Codigo: #{Producto.codigo}, #{Producto.marca}, #{Producto.nombre}" style="display:inline-block"/>
+
+            </p:dataList>
+
+            
+            <p:dataTable  id="tableLista" value="#{productoFormBean.obtenerproducto()}" var="ropa" rows="10" rendered="false">
+                <p:column headerText="Codigo" >
+                    <p:outputLabel value="#{ropa.codigo}"/>
+                </p:column>
+                
+                <p:column headerText="Marca" >
+                    <p:outputLabel value="#{ropa.marca}"/>
+                </p:column>
+            
+                <p:column headerText="Tipo" >
+                    <p:outputLabel value="#{ropa.nombre}"/>
+                </p:column>
+                
+                <p:column headerText="Color" >
+                    <p:outputLabel value="#{ropa.color}"/>
+                </p:column>
+                
+                <p:column headerText="Talle" >
+                    <p:outputLabel value="#{ropa.talle}"/>
+                </p:column>
+                
+                <p:column headerText="Origen" >
+                    <p:outputLabel value="#{ropa.origen}"/>
+                </p:column>
+                
+                <p:column headerText="Cantidad" >
+                    <p:outputLabel value="#{ropa.cantidad}"/>
+                </p:column>
+
+                <p:column headerText="Precio" >
+                    <p:outputLabel value="#{ropa.precio}"/>
+                </p:column>
+                
+                
+            
+            </p:dataTable>
+
+            <p:dialog header="Producto Info" widgetVar="ProductoDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                <p:outputPanel id="ProductoDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty productoFormBean.selectproducto}" columnClasses="label,value">
+                        <f:facet name="header">
+                            <p:graphicImage value="ima/ropa/#{productoFormBean.selectproducto.nombre}-#{productoFormBean.selectproducto.color}.png" /> 
+                        </f:facet>
+
+
+
+                        <h:outputText value="Detalle:" />
+                        <h:outputText value="#{productoFormBean.selectproducto.nombre}" />
+
+                        <h:outputText value="Marca:" />
+                        <h:outputText value="#{productoFormBean.selectproducto.marca}" />
+
+                        <h:outputText value="Codgo:" />
+                        <h:outputText value="#{productoFormBean.selectproducto.codigo}"/>
+
+                        <h:outputText value="Talle" />
+                        <h:outputText value="#{productoFormBean.selectproducto.talle}" />
+
+                        <h:outputText value="Color:" />
+                        <h:outputText value="#{productoFormBean.selectproducto.color}" />
+
+                        <h:outputText value="Precio" />
+                        <h:outputText value="#{productoFormBean.selectproducto.precio}" />
+
+                        <h:outputText value="Codigo de Barra"/>
+                        <p:barcode value="5901234#{productoFormBean.selectproducto.codigo}" type="upca" format="png" />  
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form> 
+
+
+
+
+        <p:dialog  id="dlregistro" widgetVar="wregistro" header="Nuevo Registro" modal="true" resizable="False" closeOnEscape="true">
+            <h:form>
+                <p:growl id="growl" showDetail="true" life="2000"/> 
+                <p:panelGrid  columns="2" >
+                    <p:outputLabel for="txtcodigo" value="Codigo: "/>
+                    <p:inputMask id="txtcodigo" mask="9999" required="true" requiredMessage="Ingrese Codigo" size="4" value="#{productoFormBean.producto.codigo}"/>
+
+                    <p:outputLabel for="txtcolor" value="Color: " />
+                    <p:selectOneMenu id="txtcolor" value="#{productoFormBean.producto.color}" required="true" requiredMessage="Ingrese Color"  >
+                        <f:selectItem itemLabel="Selecione un Color" itemValue="" />
+                        <f:selectItems value="#{productoFormBean.obtenercolores()}"  var="Itemc" itemLabel="#{Itemc.color}" itemValue="#{Itemc.color}"/>
+                    </p:selectOneMenu>
+
+
+                    <p:outputLabel for="txtnombre" value="Tipo: " />
+                    <p:selectOneMenu id="txtnombre" value="#{productoFormBean.producto.nombre}" required="true" requiredMessage="Ingrese Tipo"  >
+                        <f:selectItem itemLabel="Selecione un Tipo" itemValue="" />
+                        <f:selectItems value="#{productoFormBean.obtenertipo()}"  var="Itemti" itemLabel="#{Itemti.tipo}" itemValue="#{Itemti.tipo}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="txtcantpaginas" value="Cantidad: "/>
+                    <p:spinner id="txtcantpaginas" min="1" max="999" size="4" value="#{productoFormBean.producto.cantidad}"/>
+
+                    <p:outputLabel for="txtautor" value="Marca: "/>
+                    <p:inputTextarea id="txtautor" rows="1" cols="40" required="true" requiredMessage="Ingrese Marca" value="#{productoFormBean.producto.marca}"/>
+
+                    <p:outputLabel for="txttalle" value="Talle: " />
+                    <p:selectOneMenu id="txttalle" value="#{productoFormBean.producto.talle}" required="true" requiredMessage="Ingrese Talle">
+                        <f:selectItem itemLabel="Selecione un Talle" itemValue="" />
+                        <f:selectItems value="#{productoFormBean.obtenertalles()}"  var="Itemta" itemLabel="#{Itemta.talle}" itemValue="#{Itemta.talle}"/>
+                    </p:selectOneMenu>
+
+
+                    <p:outputLabel for="txtorigen" value="Origen: " />
+                    <p:selectOneMenu id="txtorigen" value="#{productoFormBean.producto.origen}" required="true" requiredMessage="Ingrese Origen">
+                        <f:selectItem itemLabel="Selecione un Origen" itemValue="" />
+                        <f:selectItems value="#{productoFormBean.obtenerorigenes()}"  var="Itemo" itemLabel="#{Itemo.origen}" itemValue="#{Itemo.origen}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="txtprecio" value="precio: "/>
+                    <p:inputMask id="txtprecio" mask="$9999" required="true" requiredMessage="Ingrese Precio" size="4" value="#{productoFormBean.producto.precio}"/>
+                    
+
+
+                    <p:commandButton value="Registrar"  icon="ui-icon-check"  actionListener="#{productoFormBean.guardadproducto()}" 
+                                     update=":frmTienda:datalist,:frmTienda:tableLista, growl, :dlregistro"  resetValues="true" /> 
+                    <p:commandButton value="Cancelar"  icon="ui-icon-close" immediate="true" actionListener="#{productoFormBean.msgcancelar()}" update=" :frmTienda:growl"  onclick="PF('wregistro').hide();"/>
+                </p:panelGrid>
+            </h:form> 
+        </p:dialog>
+        
+        <p:dialog id="dialogoEli" widgetVar="wdialogoEli" header="Eliminar Registro" modal="true" resizable="False" closeOnEscape="true">
+            <h:form>
+                 <p:growl id="growl" showDetail="true" life="2000"/> 
+                 <p:panelGrid  columns="2" >
+                      <p:outputLabel for="txtcodigo" value="Codigo: "/>
+                      <p:inputMask id="txtcodigo" mask="9999" required="true"  requiredMessage="Ingrese Codigo" value="#{productoFormBean.codigo}"/>
+
+                      <p:commandButton value="Eliminar"  icon="ui-icon-check"  onclick="PF('wdialogoConf').show();" resetValues="true"/> 
+                      <p:commandButton value="Cancelar"  icon="ui-icon-close" immediate="true" actionListener="#{productoFormBean.msgcancelar()}" update=" :frmTienda:growl" onclick="PF('wdialogoEli').hide();" />
+                 </p:panelGrid>
+            </h:form> 
+         </p:dialog>
+
+        <p:dialog id="dialogoConf" widgetVar="wdialogoConf" header="Está seguro de eliminar el producto?" modal="true" resizable="False" closeOnEscape="true">
+            <h:form>
+                 <p:growl id="growl" showDetail="true" life="2000"/> 
+                 <p:panelGrid  columns="2" >
+                     <p:commandButton value="Confirmar"  icon="ui-icon-check"  actionListener="#{productoFormBean.eliminar()}" 
+                                      update=":frmTienda:tableLista, :frmTienda:datalist, growl, :dialogoEli"/> 
+                      <p:commandButton value="Cancelar"  icon="ui-icon-close" immediate="true" actionListener="#{productoFormBean.msgcancelar()}" update=" :frmTienda:growl" onclick="PF('wdialogoConf').hide();" />
+                 </p:panelGrid>
+            </h:form> 
+         </p:dialog>
+    </h:body>
+</html>
+
